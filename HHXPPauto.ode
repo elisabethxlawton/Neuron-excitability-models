@@ -1,0 +1,52 @@
+# Equations
+dn/dt = (alphan(v) * (1-n)) - (betan(v) * n)
+dm/dt = (alpham(v) * (1-m)) - (betam(v) * m)
+dh/dt = (alphah(v) * (1-h)) - (betah(v) * h)
+dv/dt = (1/Cm) * (Iinput(t) - INa(v) - IK(v) -ILeak(v))
+
+
+# Functions
+
+Iinput(t) = Iamp * (heav(t - tstart) - heav(t - tstart - deltat))
+
+alphan(v) = 0.01 * (-(v + 65.0) + 10)/ (exp((-(v + 65.0) + 10)/10.0) - 1)
+alpham(v) = 0.1 * (-(v + 65.0) + 25.0) / (exp((-(v + 65.0) + 25) / 10.0) - 1)
+alphah(v) = 0.07 * exp(-0.05*(v+60))
+betan(v) = 0.125 * exp(-(v + 65.0) / 80.0)
+betam(v) = 4 * exp(-(v + 65.0) / 18.0)
+betah(v) = 1.0 / (exp((-(v + 65.0) + 30.0) / 10.0) + 1)
+INa(v) = (gna * m^3 * h) * (v - ENa)
+IK(v) = (gk * n^4) * (v - EK)
+ILeak(v) = gleak * (v - Eleak)
+
+
+# Parameters
+par Iamp=5
+par gna=120
+par gk=36
+par gleak=0.3
+par Cm=1
+par Eleak=-54.3
+par ENa=50
+par EK=-77.5
+par tstart=5
+par deltat=15
+
+
+
+# Numerics
+@ TOTAL=100,DT=.01,xlo=0,xhi=100,ylo=-90,yhi=30
+@ NPLOT=1,XP1=t,YP1=V
+@ Ds = 0.01,Dsmin=1e-5,Dsmax=.1,parmin=-100,parmax=250
+@ autoxmin=-100,autoxmax=250
+@ autoymin=-80,autoymax=30
+@ Ntst=50,Nmax=2000,NPr=100
+@ EPSL=1e-7,EPSU=1e-7,EPSS=1e-5
+
+
+# Initial Conditions
+n(0)=0.17070866102860438
+m(0)=0.013702220236798495
+h(0)=0.9040557479698836
+v(0)=-75.9052784 
+done

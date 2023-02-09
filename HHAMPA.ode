@@ -1,0 +1,86 @@
+# Equations
+dC0/dt = C1*(Ru1) - C0*(Rb*Tinput)
+dC1/dt = C0*(Rb*Tinput)+D1*(Rr)+C2*(Ru2) - C1*(Ru1+Rd+Rb*Tinput)
+dC2/dt = C1*(Rb*Tinput)+D2*(Rr)+O*(Rc) - C2*(Ru2+Rd+Ro)
+dO/dt = C2*(Ro) - O*(Rc)
+dD1/dt = C1*(Rd) - D1*(Rr)
+dD2/dt = C2*(Rd) - D2*(Rr)
+
+
+dn/dt = (alphan(v) * (1-n)) - (betan(v) * n)
+dm/dt = (alpham(v) * (1-m)) - (betam(v) * m)
+dh/dt = (alphah(v) * (1-h)) - (betah(v) * h)
+dv/dt = (1/Cm) * (appinput-IAMPA(V) - INa(v) - IK(v) -ILeak(V))
+
+
+# Functions
+appinput = Iapp*(heav(t - appstart) - heav(t - appstart - deltaapp))
+Tinput = (heav(t - tstart) - heav(t - tstart - deltat))
+
+ILeak(V) = gleak * (V - Eleak)
+IAMPA(V) = gAMPA * O * (V - EAMPA)
+
+alphan(v) = 0.01 * (-(v + 65.0) + 10)/ (exp((-(v + 65.0) + 10)/10.0) - 1)
+alpham(v) = 0.1 * (-(v + 65.0) + 25.0) / (exp((-(v + 65.0) + 25) / 10.0) - 1)
+alphah(v) = 0.07 * exp(-0.05*(v+60))
+betan(v) = 0.125 * exp(-(v + 65.0) / 80.0)
+betam(v) = 4 * exp(-(v + 65.0) / 18.0)
+betah(v) = 1.0 / (exp((-(v + 65.0) + 30.0) / 10.0) + 1)
+INa(v) = (gna * m^3 * h) * (v - ENa)
+IK(v) = (gk * n^4) * (v - EK)
+
+
+
+
+# Parameters
+par Ru1=0.0059
+par Rb=13*(100)
+par Ru2=8.6
+par Rr=0.064
+par Rd=0.9
+par Ro=0.27
+par Rc=0.2
+par gAMPA=5
+par EAMPA=0
+
+par Iapp=20
+par gna=120
+par gk=36
+par gleak=0.3
+par Cm=1
+par Eleak=-54.3
+par ENa=50
+par EK=-77.5
+par tstart=40
+par deltat=1
+par appstart=15
+par deltaapp=100
+
+
+
+# Numerics
+@ TOTAL=100,DT=.01,xlo=0,xhi=100,ylo=-90,yhi=30
+@ NPLOT=1,XP1=t,YP1=V
+@ BOUNDS=10000
+@ Ds = 0.01,Dsmin=1e-5,Dsmax=.1,parmin=-100,parmax=250
+@ autoxmin=-100,autoxmax=250
+@ autoymin=-80,autoymax=30
+@ Ntst=50,Nmax=2000,NPr=100
+@ EPSL=1e-7,EPSU=1e-7,EPSS=1e-5
+
+
+# Initial Conditions
+
+C0(0)=0.3188186287879944
+C1(0)=0.5575171113014221
+C2(0)=2.701692028495017e-05
+O(0)=5.131058787810616e-05
+D1(0)=7.884481906890869
+D2(0)=0.003939544782042503
+
+
+n(0)=0.3172344565391541
+m(0)=0.05275252088904381
+h(0)=0.6555495858192444
+v(0)=-65.02887725830078
+done
